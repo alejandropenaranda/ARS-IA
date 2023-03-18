@@ -1,3 +1,4 @@
+#definition of code
 def create_board (n,m):
     pass
 
