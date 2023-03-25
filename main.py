@@ -144,7 +144,6 @@ queso = generate_queso()
 #se inicia la aplicacion
 pygame.init()
 
-
 #se carga la imagen del raton y demas
 mouseImage = pygame.image.load('imagenes/rata2.png')
 cheeseImage = pygame.image.load('imagenes/queso.png')
