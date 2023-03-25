@@ -129,6 +129,7 @@ m = 5
 def generate_rata():
     mouse = {'x':0, 'y':0}
     mouse.update({'x':random.randint(0,n-1), 'y':random.randint(0,m-1)})
+    mouse = {'x':0,'y':4-1}
     return  mouse
 mouse = generate_rata()
 
@@ -141,6 +142,99 @@ def generate_queso():
     
 queso = generate_queso()
 
+# y son las filas(abajo) ,   x las columas (izq derecha)
+def movement_rata(matriz):
+    left_sen = False
+    right_sen = False
+    up_sen = False
+    down_sen = False
+
+    aux = False
+
+    if mouse.get('x') == 0:
+        aux = True
+        left_sen = False
+        if mouse.get('y') == 0:
+            up_sen = False  
+            if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+                right_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+                down_sen = True
+        elif mouse.get('y') == n-1:
+            down_sen = False
+            if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+                right_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+                up_sen = True
+        else:#bien
+            if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+                right_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+                up_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+                down_sen = True
+
+    if mouse.get('x') == n-1:
+        aux = True
+        right_sen = False
+        if mouse.get('y') == 0:
+            up_sen = False
+            if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+                left_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+                down_sen = True
+        elif mouse.get('y') == n-1:
+            down_sen = False
+            if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+                left_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+                up_sen = True
+        else:# esto fuinciona bien
+            if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+                left_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+                up_sen = True
+            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+                down_sen = True
+    """
+    if mouse.get('y') == 0 and aux == False:
+        up_sen = False
+        if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+            left_sen = True
+        if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+            right_sen = True
+        if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+            down_sen = True
+    
+    if mouse.get('y') == n-1 and aux == False:  # Presuntamente funciona bien
+        down_sen = False
+        if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+            left_sen = True
+        if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+            right_sen = True
+        if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+            up_sen = True
+    """
+    #else:
+     #   if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
+      #      left_sen = True
+    #    if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
+     #       right_sen = True
+     #   if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
+      #      up_sen = True
+      #  if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
+      #      down_sen = True
+
+    print('izquierda: ',left_sen)
+    print('derecha: ',right_sen)
+    print('arriba: ',up_sen)
+    print('abajo: ',down_sen)
+   # print('izquierda',matriz[mouse.get('y')-1][mouse.get('x')])
+    #print('derecha',matriz[mouse.get('y')+1][mouse.get('x')])
+   # print('arriba',matriz[mouse.get('y')][mouse.get('x')-1])
+    #print('abajo',matriz[mouse.get('y')][mouse.get('x')+1])
+
+
 #se inicia la aplicacion
 pygame.init()
 
@@ -149,6 +243,7 @@ mouseImage = pygame.image.load('imagenes/rata2.png')
 cheeseImage = pygame.image.load('imagenes/queso.png')
 roadImage = pygame.image.load('imagenes/road1.png')
 wallImage = pygame.image.load('imagenes/wall.jpg')
+test = pygame.image.load('imagenes/road.jpg')
 imgsize = 90
 
 #Definir colores
@@ -171,9 +266,15 @@ screen.fill(white)
 
 #llamado de la funcion tablero
 #create_board(matriz)
-create_board(generate_matrix(n,m),imgsize)
+tablero = generate_matrix(n,m)
+print(tablero)
+create_board(tablero,imgsize)
 screen.blit(mouseImage, ((mouse.get('x')*imgsize),(mouse.get('y')*imgsize)))
 screen.blit(cheeseImage, ((queso.get('x')*imgsize),(queso.get('y')*imgsize)))
+
+# y son las filas(abajo) x las columas
+#screen.blit(test, (0*imgsize,3*imgsize))
+movement_rata(tablero)
 
 #while para la logica o los eventos
 while True:
