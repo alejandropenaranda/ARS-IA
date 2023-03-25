@@ -1,6 +1,12 @@
 import pygame , sys
 import random
 
+#-----------------
+mouse = {'x':0, 'y':0}
+
+
+#-----------------
+
 def movements_table (left_sen, up_sen, right_sen,down_sen, hq):
     # the movements will be represented by numbers  1 = up, 2 = left, 3 = down, 4 = right
     # when the mouse found the cheese, this will be represented by the number 5 = found cheese
@@ -106,8 +112,6 @@ def create_board (matriz):
             elif(cells ==0):
                 #pygame.draw.rect(screen,black,((j*size)+aux,(i*size)+aux,size,size))
                 screen.blit(wallImage, ((j*size)+aux,(i*size)+aux))
-            elif(cells ==2):
-                screen.blit(mouseImage, ((j*size)+aux,(i*size)+aux))
             j = j+1
             if (j==tamanho):
                 j = 0
@@ -157,6 +161,7 @@ screen.fill(white)
 #llamado de la funcion tablero
 #create_board(matriz)
 create_board(generate_matrix(n,m))
+screen.blit(mouseImage, ((mouse.get('x')*90)+25,(mouse.get('y')*90)+25))
 
 #while para la logica o los eventos
 while True:
