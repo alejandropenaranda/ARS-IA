@@ -119,10 +119,8 @@ def create_board (matriz,size):
         i = i+1
         for cells in rows:
             if (cells == 1):
-                #pygame.draw.rect(screen,blue,((j*size)+aux,(i*size)+aux,size,size))
                 screen.blit(roadImage, ((j*size)+aux,(i*size)+aux))
-            elif(cells ==0):
-                #pygame.draw.rect(screen,black,((j*size)+aux,(i*size)+aux,size,size))
+            elif(cells == 0):
                 screen.blit(wallImage, ((j*size)+aux,(i*size)+aux))
             j = j+1
             if (j==tamanho):
@@ -133,15 +131,18 @@ def create_board (matriz,size):
     return True
 #-----------------
 
-# tamaño de las filas y columnas
+# tamaño de las filas y columnas 
+# debe ser nxn
 n = 5
 m = 5
 
-#-----------------
+#-----------------#
 def generate_rata():
     mouse = {'x':0, 'y':0}
     mouse.update({'x':random.randint(0,n-1), 'y':random.randint(0,m-1)})
     return  mouse
+
+#definicion de la rata
 mouse = generate_rata()
 
 def generate_queso():
@@ -150,9 +151,9 @@ def generate_queso():
     if(mouse == queso):
         queso = generate_queso()
     return queso
- # the movements will be represented by numbers  1 = up, 2 = left, 3 = down, 4 = right
+
+# the movements will be represented by numbers  1 = up, 2 = left, 3 = down, 4 = right
 def move_mouse(action):
-    print(action,"esta es la accion")
     if action == 1:
         mouse.update({'y':mouse.get('y')-1})
     elif action == 2:
@@ -162,12 +163,15 @@ def move_mouse(action):
     elif action == 4:
         mouse.update({'x':mouse.get('x')+1})
     elif action == 5:
-        print("huele a queso debemos terminar el simulador")
+        print("huele a queso")
+        sys.exit()
     
+#definicion del queso
 queso = generate_queso()
 
 # y son las filas(abajo) ,   x las columas (izq derecha)
 def movement_rata(matriz):
+
     left_sen = False
     right_sen = False
     up_sen = False
@@ -189,7 +193,7 @@ def movement_rata(matriz):
             if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
                 up_sen = True
             return [left_sen,right_sen,down_sen,up_sen]
-        else:#bien
+        else:
             if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
                 right_sen = True
             if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
@@ -230,7 +234,6 @@ def movement_rata(matriz):
         if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
             down_sen = True
         return [left_sen,right_sen,down_sen,up_sen]
-    
     if mouse.get('y') == n-1:
         down_sen = False
         if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
@@ -288,59 +291,29 @@ size = (aux1,aux2)
 screen = pygame.display.set_mode(size)
 
 #llamado de la funcion tablero
-
 tablero = generate_matrix(n,m)
+
+#pintar el tablero inicial
 pintar_juego()
 
-# y son las filas(abajo) x las columas
-#screen.blit(test, (0*imgsize,3*imgsize))
-
-#while para la logica o los eventos
-print(mouse,"posicion inicial rata")
-#for i in range(3):
-    #movimiento_rata = movement_rata(tablero)
-    #print(movimiento_rata,"posibles movimientos")
-    ##print(movements_table(movimiento_rata,huele_queso()),"movimiento")
-    #move_mouse(movements_table(movimiento_rata,huele_queso()))
-    #print(mouse,"esta es la rata")
 def aux():
     movimiento_rata = movement_rata(tablero)
     move_mouse(movements_table(movimiento_rata,huele_queso()))
-auxiliar=1
 
+#while para la logica o los eventos
+
+auxiliar=1
 while True:
     tiempo = pygame.time.get_ticks()/1000
-    #print(tiempo,"tiempo")
-    #print(auxiliar,"auxiliar")
-    #aux()
-    #pintar_juego()
     if tiempo == auxiliar:
-        print(tiempo,"este es el tiempo")
         aux()
         pintar_juego()
         auxiliar = auxiliar+1
 
     pygame.display.flip()
     pygame.display.update()
-    #pygame.time.set_timer(aux(), 5000)
-    #movimiento_rata = movement_rata(tablero)
-    #print(movimiento_rata,"posibles movimientos")
-    #print(movements_table(movimiento_rata,huele_queso()),"movimiento")
-    #move_mouse(movements_table)
+    
     for event in pygame.event.get():
         
         if event.type == pygame.QUIT:
             sys.exit()
-        if event.type == pygame.KEYDOWN:
-            aux()
-            pintar_juego()
-
-    #zona de dibujo
-    #pygame.draw.line(screen, green, [0,100], [100,100], 5)
-    #pygame.draw.rect(screen,blue,(0,0,50,50)),
-
-    # actualiza la pantalla
-        
-
-#definition of code
-#cambio de commit
