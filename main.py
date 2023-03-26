@@ -1,7 +1,13 @@
 import pygame , sys
 import random
 
-def movements_table (left_sen, up_sen, right_sen,down_sen, hq):
+
+def movements_table (sensores, hq):
+    left_sen = sensores[0]
+    right_sen = sensores[1]
+    down_sen = sensores[2]
+    up_sen = sensores[3]
+
     # the movements will be represented by numbers  1 = up, 2 = left, 3 = down, 4 = right
     # when the mouse found the cheese, this will be represented by the number 5 = found cheese
     # when any sensor is true, it means that the mouse can go in that direction, otherwise he cant (false)
@@ -71,6 +77,12 @@ def movements_table (left_sen, up_sen, right_sen,down_sen, hq):
     
 #print(movements_table(True,True,True,False,False))
 
+def huele_queso():
+    if queso == mouse:
+        return True
+    else: 
+        return False
+
 def generate_matrix(n,m):
     matriz = []
     for i in range(n):
@@ -129,16 +141,28 @@ m = 5
 def generate_rata():
     mouse = {'x':0, 'y':0}
     mouse.update({'x':random.randint(0,n-1), 'y':random.randint(0,m-1)})
-    mouse = {'x':0,'y':4-1}
     return  mouse
 mouse = generate_rata()
 
 def generate_queso():
     queso = {'x':0, 'y':0}
     queso.update({'x':random.randint(0,n-1), 'y':random.randint(0,m-1)})
-    if(queso == mouse):
-        generate_queso()
+    if(mouse == queso):
+        queso = generate_queso()
     return queso
+ # the movements will be represented by numbers  1 = up, 2 = left, 3 = down, 4 = right
+def move_mouse(action):
+    print(action,"esta es la accion")
+    if action == 1:
+        mouse.update({'y':mouse.get('y')-1})
+    elif action == 2:
+        mouse.update({'x':mouse.get('x')-1})
+    elif action == 3:
+        mouse.update({'y':mouse.get('y')+1})
+    elif action == 4:
+        mouse.update({'x':mouse.get('x')+1})
+    elif action == 5:
+        print("huele a queso debemos terminar el simulador")
     
 queso = generate_queso()
 
@@ -149,91 +173,93 @@ def movement_rata(matriz):
     up_sen = False
     down_sen = False
 
-    aux = False
-
     if mouse.get('x') == 0:
-        aux = True
         left_sen = False
         if mouse.get('y') == 0:
             up_sen = False  
-            if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+            if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
                 right_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+            if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
                 down_sen = True
+            return [left_sen,right_sen,down_sen,up_sen]
         elif mouse.get('y') == n-1:
             down_sen = False
-            if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+            if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
                 right_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+            if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
                 up_sen = True
+            return [left_sen,right_sen,down_sen,up_sen]
         else:#bien
-            if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+            if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
                 right_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+            if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
                 up_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+            if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
                 down_sen = True
-
+            return [left_sen,right_sen,down_sen,up_sen]
     if mouse.get('x') == n-1:
-        aux = True
         right_sen = False
         if mouse.get('y') == 0:
             up_sen = False
-            if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+            if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
                 left_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+            if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
                 down_sen = True
+            return [left_sen,right_sen,down_sen,up_sen]
         elif mouse.get('y') == n-1:
             down_sen = False
-            if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+            if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
                 left_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+            if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
                 up_sen = True
-        else:# esto fuinciona bien
-            if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+            return [left_sen,right_sen,down_sen,up_sen]
+        else:
+            if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
                 left_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+            if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
                 up_sen = True
-            if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+            if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
                 down_sen = True
-    """
-    if mouse.get('y') == 0 and aux == False:
+            return [left_sen,right_sen,down_sen,up_sen]
+    if mouse.get('y') == 0:
         up_sen = False
-        if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+        if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
             left_sen = True
-        if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+        if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
             right_sen = True
-        if matriz[mouse.get('x')][mouse.get('y')+1] == 1:
+        if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
             down_sen = True
+        return [left_sen,right_sen,down_sen,up_sen]
     
-    if mouse.get('y') == n-1 and aux == False:  # Presuntamente funciona bien
+    if mouse.get('y') == n-1:
         down_sen = False
-        if matriz[mouse.get('x')-1][mouse.get('y')] == 1:
+        if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
             left_sen = True
-        if matriz[mouse.get('x')+1][mouse.get('y')] == 1:
+        if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
             right_sen = True
-        if matriz[mouse.get('x')][mouse.get('y')-1] == 1:
+        if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
             up_sen = True
-    """
-    #else:
-     #   if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
-      #      left_sen = True
-    #    if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
-     #       right_sen = True
-     #   if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
-      #      up_sen = True
-      #  if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
-      #      down_sen = True
+        return [left_sen,right_sen,down_sen,up_sen]
+    else:
+        if matriz[mouse.get('y')][mouse.get('x')-1] == 1:
+            left_sen = True
+        if matriz[mouse.get('y')][mouse.get('x')+1] == 1:
+            right_sen = True
+        if matriz[mouse.get('y')-1][mouse.get('x')] == 1:
+            up_sen = True
+        if matriz[mouse.get('y')+1][mouse.get('x')] == 1:
+            down_sen = True
+        return [left_sen,right_sen,down_sen,up_sen]
 
-    print('izquierda: ',left_sen)
-    print('derecha: ',right_sen)
-    print('arriba: ',up_sen)
-    print('abajo: ',down_sen)
-   # print('izquierda',matriz[mouse.get('y')-1][mouse.get('x')])
-    #print('derecha',matriz[mouse.get('y')+1][mouse.get('x')])
-   # print('arriba',matriz[mouse.get('y')][mouse.get('x')-1])
-    #print('abajo',matriz[mouse.get('y')][mouse.get('x')+1])
-
+def pintar_juego():
+    #fondo blanco
+    screen.fill(white)
+    #pintar el tablero
+    create_board(tablero,imgsize)
+    #pintar la rata
+    screen.blit(mouseImage, ((mouse.get('x')*imgsize),(mouse.get('y')*imgsize)))
+    #pintar el queso
+    screen.blit(cheeseImage, ((queso.get('x')*imgsize),(queso.get('y')*imgsize)))
 
 #se inicia la aplicacion
 pygame.init()
@@ -261,33 +287,60 @@ size = (aux1,aux2)
 #definicion de la GUI
 screen = pygame.display.set_mode(size)
 
-#fondo blanco
-screen.fill(white)
-
 #llamado de la funcion tablero
-#create_board(matriz)
+
 tablero = generate_matrix(n,m)
-print(tablero)
-create_board(tablero,imgsize)
-screen.blit(mouseImage, ((mouse.get('x')*imgsize),(mouse.get('y')*imgsize)))
-screen.blit(cheeseImage, ((queso.get('x')*imgsize),(queso.get('y')*imgsize)))
+pintar_juego()
 
 # y son las filas(abajo) x las columas
 #screen.blit(test, (0*imgsize,3*imgsize))
-movement_rata(tablero)
 
 #while para la logica o los eventos
+print(mouse,"posicion inicial rata")
+#for i in range(3):
+    #movimiento_rata = movement_rata(tablero)
+    #print(movimiento_rata,"posibles movimientos")
+    ##print(movements_table(movimiento_rata,huele_queso()),"movimiento")
+    #move_mouse(movements_table(movimiento_rata,huele_queso()))
+    #print(mouse,"esta es la rata")
+def aux():
+    movimiento_rata = movement_rata(tablero)
+    move_mouse(movements_table(movimiento_rata,huele_queso()))
+auxiliar=1
+
 while True:
+    tiempo = pygame.time.get_ticks()/1000
+    #print(tiempo,"tiempo")
+    #print(auxiliar,"auxiliar")
+    #aux()
+    #pintar_juego()
+    if tiempo == auxiliar:
+        print(tiempo,"este es el tiempo")
+        aux()
+        pintar_juego()
+        auxiliar = auxiliar+1
+
+    pygame.display.flip()
+    pygame.display.update()
+    #pygame.time.set_timer(aux(), 5000)
+    #movimiento_rata = movement_rata(tablero)
+    #print(movimiento_rata,"posibles movimientos")
+    #print(movements_table(movimiento_rata,huele_queso()),"movimiento")
+    #move_mouse(movements_table)
     for event in pygame.event.get():
+        
         if event.type == pygame.QUIT:
             sys.exit()
+        if event.type == pygame.KEYDOWN:
+            aux()
+            pintar_juego()
 
     #zona de dibujo
     #pygame.draw.line(screen, green, [0,100], [100,100], 5)
     #pygame.draw.rect(screen,blue,(0,0,50,50)),
 
     # actualiza la pantalla
-    pygame.display.flip()
+        
 
 #definition of code
 #cambio de commit
