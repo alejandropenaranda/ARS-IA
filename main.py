@@ -1,6 +1,6 @@
 import pygame , sys
 import random
-
+import math
 
 def movements_table (sensores, hq):
     left_sen = sensores[0]
@@ -301,7 +301,7 @@ def aux():
 
 auxiliar=1
 while True:
-    tiempo = pygame.time.get_ticks()/1000
+    tiempo = math.floor(pygame.time.get_ticks()/1000)
     if tiempo == auxiliar:
         aux()
         pintar_juego()
