@@ -75,8 +75,6 @@ def movements_table (sensores, hq):
         action = 3
         return action
     
-#print(movements_table(True,True,True,False,False))
-
 def huele_queso():
     if queso == mouse:
         return True
@@ -272,7 +270,6 @@ mouseImage = pygame.image.load('imagenes/rata2.png')
 cheeseImage = pygame.image.load('imagenes/queso.png')
 roadImage = pygame.image.load('imagenes/road1.png')
 wallImage = pygame.image.load('imagenes/wall.jpg')
-test = pygame.image.load('imagenes/road.jpg')
 imgsize = 90
 
 #Definir colores
